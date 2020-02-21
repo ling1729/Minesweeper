@@ -1,5 +1,5 @@
-public static int NUM_ROWS = 20;
-public static int NUM_COLS = 20;
+public static int NUM_ROWS = 100;
+public static int NUM_COLS = 100;
 import de.bezier.guido.*;
 private boolean gameOver = false;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
@@ -8,10 +8,11 @@ private ArrayList <MSButton> mines = new ArrayList<MSButton>(); //ArrayList of j
 private int numbombs = 40;
 private int clicks = 0;
 boolean won = false;
-
+private int sizex = 10000;
+private int sizey = 10000;
 public void setup ()
 {
-    size(400, 400);
+    size(10000, 10000);
     textAlign(CENTER,CENTER);
     
     // make the manager
@@ -108,8 +109,8 @@ public class MSButton
     
     public MSButton ( int row, int col )
     {
-        width = 400/NUM_COLS;
-        height = 400/NUM_ROWS;
+        width = sizex/NUM_COLS;
+        height = sizey/NUM_ROWS;
         myRow = row;
         myCol = col; 
         x = myCol*width;

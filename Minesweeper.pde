@@ -5,8 +5,11 @@ private boolean gameOver = false;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> mines = new ArrayList<MSButton>(); //ArrayList of just the minesweeper buttons that are mined
-private int numbombs = 50;
-void setup ()
+private int numbombs = 40;
+private int clicks = 0;
+boolean won = false;
+
+public void setup ()
 {
     size(400, 400);
     textAlign(CENTER,CENTER);
@@ -23,18 +26,14 @@ void setup ()
             buttons[i][j]= new MSButton(i, j);
         }
     }
-
-    
-    setMines(numbombs);
 }
-
-public void setMines(int num)
+public void setMines(int num, int x, int y)
 {
     while(mines.size() < num)
     {
         int a = (int)(Math.random() * NUM_ROWS);
         int b = (int)(Math.random() * NUM_COLS);
-        if(!mines.contains(buttons[a][b]))
+        if(!mines.contains(buttons[a][b]) && !(a == x && b == y))
             mines.add(buttons[a][b]);
     }
 }
@@ -60,6 +59,8 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
+	won = false;
+	gameOver = true;
     for(int i = 0; i < NUM_ROWS; i++){
         for(int j = 0; j < NUM_COLS; j++){
         	String message = "      You Lose      ";
@@ -70,6 +71,8 @@ public void displayLosingMessage()
 }
 public void displayWinningMessage()
 {
+	won = true;
+	gameOver = true;
     for(int i = 0; i < NUM_ROWS; i++){
         for(int j = 0; j < NUM_COLS; j++){
         	String message = "      You win!      ";
@@ -119,6 +122,9 @@ public class MSButton
     // called by manager
     public void mousePressed () 
     {
+    	clicks ++;
+    	if(clicks == 1)
+    		setMines(numbombs, myRow, myCol);
         if(gameOver) return;
         
         if(!clicked && (keyPressed || mouseButton == RIGHT))
@@ -160,8 +166,12 @@ public class MSButton
     }
     public void draw () 
     {    
-    	if(gameOver && mines.contains(this))
-    		fill(255,0,0);
+    	if(gameOver && mines.contains(this)){
+    		if(won)
+    			fill(0, 255, 0);
+    		else
+    			fill(255,0,0);
+    	}
         else if (flagged)
             fill(0);
         else if( clicked && mines.contains(this) ) 
